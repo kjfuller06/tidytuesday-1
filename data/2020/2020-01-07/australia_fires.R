@@ -26,7 +26,7 @@ clean_df <- read_file_list %>%
   map(read_clean_temp_data) %>% 
   bind_rows()
 
-write_csv(clean_df, here::here("2020", "2020-01-07","temperature.csv"))
+write_csv(clean_df, here::here("data","2020", "2020-01-07","temperature.csv"))
 
 
 ##### Prep for Clean Rain Data
@@ -69,4 +69,4 @@ clean_rain_df <- read_precip_list %>%
   map(read_clean_precip_data) %>% 
   bind_rows()
 
-write_csv(clean_rain_df, here::here("2020", "2020-01-07","rainfall.csv"))
+write_csv(clean_rain_df, here::here("data","2020", "2020-01-07","rainfall.csv"))

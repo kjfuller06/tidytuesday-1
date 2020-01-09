@@ -14,14 +14,26 @@ library(tidyverse)
 
 url <- "http://www.rfs.nsw.gov.au/feeds/majorIncidents.json"
 
-fires %>% 
-  jsonlite::write_json("2020-01-06_incidents.json")
+url %>% 
+  jsonlite::write_json("2020-01-09_incidents.json")
 
 fires <- st_read(url)
 
 fires
 
-mapview(fires)
+fires2<-fires %>% 
+  separate(description,c("Alert","Location","Council","Status","Type","Fire","Size","Agency","Updated"),sep=" <br />",convert=TRUE) %>% 
+  separate(Size,c("garbage", "Size"),sep=": ",remove=TRUE) %>% 
+  separate(Size,c("Size", "garbage"),sep=" ",remove=TRUE) %>% 
+  mutate(Size=as.numeric(Size)) %>% 
+  select(-garbage) %>% 
+  filter(Size>0)
+
+# fires2$Size<-grep(": ",x=fires2$Size,value=TRUE)
+# fires2$Size<-grep(" ",x=fires2$Size,value=TRUE)
+# fires2<-fires2[fires2$Size>0,]
+
+mapview(fires2,zcol="Status",col.regions = c("yellow", "red", "forestgreen"))
 
 #' Hacky way to get rid of points within geometry collections
 fire_poly <- fires %>% 
